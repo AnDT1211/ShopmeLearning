@@ -56,7 +56,8 @@
 <h1>Manage Users | Create New User</h1>
 <div class="container border border-secondary rounded p-3">
 
-  <form th:action="@{/users/save}" method="post" style="max-width: 900px;" th:object="${user}">
+  <form th:action="@{/users/save}" method="post" style="max-width: 900px;" th:object="${user}"
+      onsubmit="return checkEmailUnique(this);">
     <div class="form-group row">
       <label for="emailInput" class="col-sm-4 col-form-label">Email</label>
       <div class="col-sm-8">
@@ -97,6 +98,22 @@
     </div>
   </form>
 
+  <div id="modalDialog" class="modal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Error</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>This email is already registered.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -105,7 +122,26 @@
     $("#buttonCancel").on("click", function(){
       window.location = "[[@{/users}]]";
     });
-  })
+  });
+  function checkEmailUnique(form) {
+    let url = "[[@{/api/users/check_email_unique}]]";
+    let email = $('#emailInput').val();
+    let csrf = $('input[name="_csrf"]').val();
+    let param = {
+      email: email,
+      _csrf: csrf
+    };
+
+    $.post(url, param, response => {
+      if (response === "OK") {
+        form.submit();
+      } else {
+        $('#modalDialog').modal("show");
+      }
+    });
+
+    return false;
+  }
 </script>
 </body>
 </html>

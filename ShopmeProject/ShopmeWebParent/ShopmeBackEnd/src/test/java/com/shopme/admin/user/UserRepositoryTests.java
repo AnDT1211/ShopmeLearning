@@ -69,4 +69,12 @@ public class UserRepositoryTests {
         userRepository.deleteById(2);
         assertThat(userRepository.count()).isEqualTo(1);
     }
+
+    @Test
+    public void testFindUserByEmail() {
+        String email = "navi@gmail.com";
+        User user = userRepository.getUserByEmail(email);
+        assertThat(user).isNotNull();
+        assertThat(userRepository.getUserByEmail("fakeEmail@gmail.com")).isNull();
+    }
 }
