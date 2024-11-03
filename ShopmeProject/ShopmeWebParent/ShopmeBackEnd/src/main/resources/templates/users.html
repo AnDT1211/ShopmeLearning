@@ -53,8 +53,11 @@
 			</div>
 		</nav>
 	</div>
+	<div th:if="${message != null}" class="alert alert-success text-center">
+		[[${message}]]
+	</div>
 	<h1>Manage Users</h1>
-
+	<a th:href="@{users/new}">Add New User</a>
 	<div>
 		<table class="table table-responsive-xl">
 			<thead class="thead-dark">
